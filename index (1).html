@@ -14,33 +14,51 @@
             <a class="navbar-brand" href="#">Simulador de Físicas</a>
         </div>
     </nav>
-
-    <div class="container text-center flex-grow-1 mt-4">
-        <div class="row justify-content-center">
-            <div class="col-md-4 mb-4">
+<div class="container-fluid text-center flex-grow-1 mt-4">
+        <div class="row justify-content-center px-4">
+            <div class="col-lg-3 col-md-4 mb-4">
                 <div class="glass-panel p-4 text-white">
                     <h5 class="mb-3">Configuración</h5>
+                    
                     <div class="mb-3 text-start">
                         <label class="form-label">Cantidad de Pelotas</label>
-                        <input type="number" id="cantidad" class="form-control" value="10" min="1" max="50">
+                        <input type="number" id="cantidad" class="form-control" value="10" min="1" max="100">
                     </div>
+
                     <div class="mb-3 text-start">
                         <label class="form-label">Punto de Lanzamiento</label>
                         <select id="lanzamiento" class="form-select">
-                            <option value="top-left">Esquina Superior Izquierda</option>
-                            <option value="top-right">Esquina Superior Derecha</option>
-                            <option value="bottom-left">Esquina Inferior Izquierda</option>
-                            <option value="bottom-right">Esquina Inferior Derecha</option>
-                            <option value="top">Arriba (Centro)</option>
-                            <option value="bottom">Abajo (Centro)</option>
+                            <option value="top-left">Esquina Sup. Izquierda</option>
+                            <option value="top-right">Esquina Sup. Derecha</option>
+                            <option value="bottom-left">Esquina Inf. Izquierda</option>
+                            <option value="bottom-right">Esquina Inf. Derecha</option>
+                            <option value="top">Desde Arriba</option>
+                            <option value="bottom">Desde Abajo</option>
                         </select>
                     </div>
-                    <button id="btnGenerar" class="btn btn-primary w-100 shadow-sm">Lanzar Pelotas</button>
+
+                    <hr class="my-3">
+
+                    <div class="mb-3 text-start">
+                        <label class="form-label">Ancho Canvas: <span id="valAncho">700</span>px</label>
+                        <input type="range" id="anchoCanvas" class="form-range" min="300" max="1000" value="700">
+                    </div>
+
+                    <div class="mb-3 text-start">
+                        <label class="form-label">Alto Canvas: <span id="valAlto">500</span>px</label>
+                        <input type="range" id="altoCanvas" class="form-range" min="200" max="600" value="500">
+                    </div>
+
+                    <button id="btnGenerar" class="btn btn-primary w-100 shadow-sm">
+                        Lanzar Pelotas
+                    </button>
                 </div>
             </div>
 
-            <div class="col-md-8">
-                <canvas id="canvas" class="glass-canvas"></canvas>
+            <div class="col-lg-9 col-md-8">
+                <div class="canvas-container shadow-lg">
+                    <canvas id="canvas" class="glass-canvas"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -48,7 +66,7 @@
     <footer class="bg-dark text-white text-center py-3 mt-4">
         <div class="container">
             <p class="mb-0">Programador: Christopher Rodríguez Pérez - ITP</p>
-            <small>Físicas, Gravedad y Fricción sobre Canvas</small>
+            <small>Físicas Reales & Glassmorphism</small>
         </div>
     </footer>
 

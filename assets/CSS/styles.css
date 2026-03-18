@@ -17,42 +17,58 @@ body {
     display: flex;
     flex-direction: column;
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
-/* Efecto Vidrio para el panel de control */
+/* Glassmorphism Panel */
 .glass-panel {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
 
-/* Estilo para los inputs dentro del panel glass */
 .form-control, .form-select {
-    background: rgba(255, 255, 255, 0.05) !important;
+    background: rgba(0, 0, 0, 0.2) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     color: white !important;
+}
+
+.form-select option { color: #000; }
+
+/* Botón con Icono */
+#btnGenerar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: bold;
     border-radius: 12px;
 }
-.form-select option { color: black; } /* Para que se lea la opción */
 
-/* Efecto Vidrio para el Canvas */
+#btnGenerar::before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url('assets/IMG/icons8-lanzar.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* Canvas Styling */
+.canvas-container {
+    overflow: auto;
+    max-height: 80vh;
+    border-radius: 25px;
+}
+
 .glass-canvas {
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 25px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
-    display: block;
-    margin: 0 auto;
-    max-width: 100%;
 }
 
-footer {
-    margin-top: auto;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
+footer { margin-top: auto; }
