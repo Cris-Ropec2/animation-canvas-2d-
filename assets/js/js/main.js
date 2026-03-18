@@ -20,70 +20,77 @@ class Circle {
         this.radius = radius;
         this.color = color;
         this.text = text;
-        this.speed = speed;
+        this.hue = Math.random() * 360; // Para el efecto glass
 
-        // Velocidades iniciales (recibidas desde el lanzador)
         this.dx = dx; 
         this.dy = dy;
+
+        // --- NUEVAS PROPIEDADES DE REALISMO ---
+        this.stretchX = 1; // Factor de estiramiento horizontal
+        this.stretchY = 1; // Factor de estiramiento vertical
     }
 
     draw(context) {
+        context.save(); // Guardamos el estado del canvas
+        
+        // Movemos el origen del canvas al centro de la pelota para rotar/escalar
+        context.translate(this.posX, this.posY);
+        context.scale(this.stretchX, this.stretchY);
+
         context.beginPath();
-        // Relleno semi-transparente
-        context.fillStyle = `hsla(${this.hue}, 100%, 50%, 0.2)`;
+        // Efecto Glassmorphism en la pelota
+        let grad = context.createRadialGradient(0, 0, 0, 0, 0, this.radius);
+        grad.addColorStop(0, `hsla(${this.hue}, 100%, 80%, 0.4)`);
+        grad.addColorStop(1, `hsla(${this.hue}, 100%, 40%, 0.1)`);
+
+        context.fillStyle = grad;
         context.strokeStyle = this.color;
         context.lineWidth = 2;
-        context.arc(this.posX, this.posY, this.radius, 0, Math.PI * 2, false);
+        
+        // Dibujamos el círculo en (0,0) porque ya tradujimos el contexto
+        context.arc(0, 0, this.radius, 0, Math.PI * 2, false);
         context.fill();
         context.stroke();
 
-        // Texto
+        // Texto (invertimos la escala para que no se deforme el número)
+        context.scale(1/this.stretchX, 1/this.stretchY);
         context.fillStyle = "white";
         context.font = "bold 14px Arial";
-        context.textAlign = "center";
-        context.textBaseline = "middle";
-        context.fillText(this.text, this.posX, this.posY);
-        context.closePath();
+        context.fillText(this.text, 0, 0);
+        
+        context.restore(); // Restauramos el canvas para la siguiente pelota
     }
 
     update(context) {
-        // --- APLICAR FÍSICAS ---
+        // Regresamos la forma a la normalidad gradualmente (Efecto resorte)
+        this.stretchX += (1 - this.stretchX) * 0.15;
+        this.stretchY += (1 - this.stretchY) * 0.15;
 
-        // 1. Gravedad: Sumamos gravedad a la velocidad vertical
         this.dy += GRAVEDAD;
-
-        // 2. Movimiento: Aplicamos velocidades a la posición
         this.posX += this.dx;
         this.posY += this.dy;
 
-        // --- DETECCIÓN DE COLISIONES ---
-
-        // Paredes laterales (Izquierda / Derecha)
-        if (this.posX + this.radius > window_width || this.posX - this.radius < 0) {
-            this.dx = -this.dx * FRICCION; // Frena un poco al chocar de lado
-        }
-
-        // Suelo (Rebote con pérdida de energía)
+        // Rebote Suelo
         if (this.posY + this.radius > window_height) {
-            // Invertimos velocidad Y y aplicamos pérdida de energía
             this.dy = -this.dy * REBOTE_SUELO;
-            // Corregimos posición para que no se "entierre"
             this.posY = window_height - this.radius;
-            // Aplicamos fricción del suelo al movimiento horizontal
             this.dx *= FRICCION;
+
+            // --- EFECTO DE APLASTAMIENTO (SQUASH) ---
+            // Solo si el impacto es fuerte
+            if (Math.abs(this.dy) > 2) {
+                this.stretchX = 1.3; // Se ensancha
+                this.stretchY = 0.7; // Se aplasta
+            }
         }
 
-        // Techo
-        if (this.posY - this.radius < 0) {
-            this.dy = -this.dy;
-            this.posY = this.radius; // Corregimos posición
-        }
-
-        // --- DETENERSE (Umbral) ---
-        // Si se mueve muy lento en ambos ejes, lo frenamos del todo
-        if (Math.abs(this.dx) < 0.1 && Math.abs(this.dy) < 1) {
-            this.dx = 0;
-            this.dy = 0;
+        // Rebote Paredes
+        if (this.posX + this.radius > window_width || this.posX - this.radius < 0) {
+            this.dx = -this.dx * FRICCION;
+            
+            // Squash lateral
+            this.stretchX = 0.7;
+            this.stretchY = 1.3;
         }
 
         this.draw(context);
