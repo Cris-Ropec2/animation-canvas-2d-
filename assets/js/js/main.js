@@ -61,16 +61,39 @@ draw(context) {
     update(context) {
         this.draw(context);
 
-        // Rebotes
-        if (this.posX + this.radius > canvas.width || this.posX - this.radius < 0) {
-            this.dx = -this.dx;
-        }
-        if (this.posY - this.radius < 0 || this.posY + this.radius > canvas.height) {
-            this.dy = -this.dy;
-        }
+    // --- REBOTE ALEATORIO EN PAREDES ---
 
-        this.posX += this.dx;
-        this.posY += this.dy;
+    // Paredes laterales (Izquierda / Derecha)
+    if (this.posX + this.radius > canvas.width || this.posX - this.radius < 0) {
+        // Invertimos dirección
+        this.dx = -this.dx;
+        // Aplicamos un "toque" aleatorio a la velocidad horizontal
+        // Esto evita que el rebote sea siempre en el mismo ángulo
+        this.dx = (this.dx > 0 ? 1 : -1) * (Math.random() * this.speed + 1);
+        
+        // Opcional: También variamos un poco la velocidad vertical al chocar de lado
+        this.dy += (Math.random() - 0.5) * 2; 
+    }
+
+    // Paredes superiores (Techo / Suelo)
+    if (this.posY - this.radius < 0 || this.posY + this.radius > canvas.height) {
+        // Invertimos dirección
+        this.dy = -this.dy;
+        // Recalculamos velocidad vertical al azar basada en su speed base
+        this.dy = (this.dy > 0 ? 1 : -1) * (Math.random() * this.speed + 1);
+        
+        // Opcional: Variamos un poco la horizontal para cambiar el ángulo
+        this.dx += (Math.random() - 0.5) * 2;
+    }
+
+    // --- LÍMITE DE VELOCIDAD (Para que no se vuelvan locos) ---
+    const maxSpeed = this.speed * 2;
+    this.dx = Math.max(Math.min(this.dx, maxSpeed), -maxSpeed);
+    this.dy = Math.max(Math.min(this.dy, maxSpeed), -maxSpeed);
+
+    // Aplicar movimiento
+    this.posX += this.dx;
+    this.posY += this.dy;
     }
 }
 
