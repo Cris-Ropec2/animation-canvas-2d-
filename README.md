@@ -35,7 +35,7 @@ Este proyecto es una aplicación web interactiva de alto rendimiento desarrollad
     ├── CSS/               # Definición de estilos y efectos Glassmorphism
     |   └── style.css 
     ├── IMG/
-    │   ├── paisaje.jpg      # Imagen de fondo (Estadio)
+    │   ├── paisaje.jpg      # Imagen de fondo 
     │   └── icons8-lanzar.png # Icono personalizado para el botón
     └── js/
         └── js/
